@@ -1,0 +1,12 @@
+USE [AtomicStat]
+GO
+
+CREATE NONCLUSTERED INDEX [ix01HashKCP] ON [kegen].[HashKCP]
+(
+	[PartitionId] ASC,
+	[BatchLogId] ASC
+)
+INCLUDE([ValidFI_CustomerId],[ValidFI_PayerId],[KeyElementId]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [FG_Main]
+GO
+
+
