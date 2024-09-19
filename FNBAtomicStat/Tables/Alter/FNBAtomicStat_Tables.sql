@@ -1,0 +1,2 @@
+﻿ALTER TABLE devstat.BatchLog ALTER COLUMN BatchLogId INT NOT NULL;
+ALTER TABLE devstat.BatchLog ALTER COLUMN BatchProcessId INT NOT NULL;
