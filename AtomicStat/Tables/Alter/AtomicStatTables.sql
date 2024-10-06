@@ -68,8 +68,8 @@ CREATE UNIQUE NONCLUSTERED INDEX [ux01HashKCP] ON [kegen].[HashKCP]
 )
 INCLUDE([PartitionId],[KeyElementId]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [FG_Kegen]
 GO
-
 */
+
 
 
 ALTER TABLE kegen.KCP_PNC_SurrogateKeyXref ALTER COLUMN BatchLogId INT NOT NULL;
@@ -113,7 +113,11 @@ ALTER TABLE [report].[KeyReference] ADD  CONSTRAINT [dfKeyReferenceBatchLogId]  
 */
 
 /*
+ALTER TABLE [stat].[BatchLog] DROP CONSTRAINT [pkStatBatch] WITH ( ONLINE = OFF )
 DROP INDEX [ix01BatchLog] ON [stat].[BatchLog]
+ALTER TABLE [stat].[BatchLog] DROP CONSTRAINT [dfBatchProcessId]
+ALTER TABLE [stat].[BatchLog] DROP CONSTRAINT [dfBatchLogBatchProcessUId]
+ALTER TABLE [stat].[BatchLog] DROP CONSTRAINT [dfBatchLogBatchUId]
 
 ALTER TABLE stat.BatchLog ALTER COLUMN BatchLogId INT NOT NULL;
 ALTER TABLE stat.BatchLog ALTER COLUMN BatchProcessId INT NOT NULL;
@@ -125,9 +129,21 @@ CREATE UNIQUE NONCLUSTERED INDEX [ix01BatchLog] ON [stat].[BatchLog]
 	[BatchEndDate] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [FG_Main]
 GO
+
+ALTER TABLE [stat].[BatchLog] ADD  CONSTRAINT [pkStatBatch] PRIMARY KEY CLUSTERED 
+(
+	[BatchLogId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [FG_Main]
+GO
+
+ALTER TABLE [stat].[BatchLog] ADD  CONSTRAINT [dfBatchProcessId]  DEFAULT ((0)) FOR [BatchProcessId]
+ALTER TABLE [stat].[BatchLog] ADD  CONSTRAINT [dfBatchLogBatchUId]  DEFAULT (newid()) FOR [BatchUId]
+ALTER TABLE [stat].[BatchLog] ADD  CONSTRAINT [dfBatchLogBatchProcessUId]  DEFAULT (0x) FOR [BatchProcessUId]
 */
 
-ALTER TABLE stat.KCPKeyElementXref ALTER COLUMN BatchLogId INT NOT NULL;
+
+
+ALTER TABLE stat.KCPKeyElementXref ALTER COLUMN BatchLogId INT NOT NULL; 
 
 /*
 ALTER TABLE [stat].[KeyElement] DROP CONSTRAINT [dfKeyElement_BatchLogId]
@@ -137,7 +153,7 @@ ALTER TABLE stat.KeyElement ALTER COLUMN BatchLogId INT NULL;
 ALTER TABLE [stat].[KeyElement] ADD  CONSTRAINT [dfKeyElement_BatchLogId]  DEFAULT ((0)) FOR [BatchLogId]
 */
 
-ALTER TABLE stat.StatGroupMaxBatch ALTER COLUMN MaxBatchLogId INT NOT NULL;
+--ALTER TABLE stat.StatGroupMaxBatch ALTER COLUMN MaxBatchLogId INT NOT NULL;
 
 /*
 DROP INDEX [ix01StatTypeBigint] ON [stat].[StatTypeBigint]
@@ -319,5 +335,19 @@ CREATE NONCLUSTERED INDEX [ix01StatTypeNumeric2938] ON [stat].[StatTypeNumeric29
 	[KeyElementId] ASC
 )
 INCLUDE([StatId],[StatValue],[BatchLogId],[PartitionId]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [FG_StatType]
+GO
+*/
+
+/*
+ALTER TABLE [work].[StatTypeDecimal1602] DROP CONSTRAINT [pkStatTypeDecimal1602Work] WITH ( ONLINE = OFF )
+
+ALTER TABLE work.StatTypeDecimal1602 ALTER COLUMN BatchLogId INT NULL;
+
+ALTER TABLE [work].[StatTypeDecimal1602] ADD  CONSTRAINT [pkStatTypeDecimal1602Work] PRIMARY KEY CLUSTERED 
+(
+	[PartitionId] ASC,
+	[KeyElementId] ASC,
+	[StatId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [FG_Work]
 GO
 */

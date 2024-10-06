@@ -1,11 +1,20 @@
---ALTER TABLE dbo.Account_StatType ALTER COLUMN BatchLogId INT NULL;
---ALTER TABLE dbo.Account_StatValue ALTER COLUMN AtomicStatBatchLogId INT NOT NULL;
---ALTER TABLE dbo.Account_StatValue ALTER COLUMN BatchLogId INT NULL;
---ALTER TABLE dbo.Account_StatValue_with_KeyTypeId_HashBulkId ALTER COLUMN AtomicStatBatchLogId INT NOT NULL;
---ALTER TABLE dbo.Deposit_StatType ALTER COLUMN BatchLogId INT NULL;
---ALTER TABLE dbo.Deposit_StatValue ALTER COLUMN AtomicStatBatchLogId INT NOT NULL;
---ALTER TABLE dbo.Deposit_StatValue ALTER COLUMN BatchLogId INT NULL;
---ALTER TABLE dbo.Deposit_StatValue_with_KeyTypeId_HashBulkId ALTER COLUMN AtomicStatBatchLogId INT NOT NULL;
+truncate table dbo.Account_StatType
+truncate table dbo.Account_StatValue
+truncate table dbo.Account_StatValue
+truncate table dbo.Account_StatValue_with_KeyTypeId_HashBulkId
+truncate table dbo.Deposit_StatType
+truncate table dbo.Deposit_StatValue
+truncate table dbo.Deposit_StatValue
+truncate table dbo.Deposit_StatValue_with_KeyTypeId_HashBulkId
+
+ALTER TABLE dbo.Account_StatType ALTER COLUMN BatchLogId INT NULL;
+ALTER TABLE dbo.Account_StatValue ALTER COLUMN AtomicStatBatchLogId INT NOT NULL;
+ALTER TABLE dbo.Account_StatValue ALTER COLUMN BatchLogId INT NULL;
+ALTER TABLE dbo.Account_StatValue_with_KeyTypeId_HashBulkId ALTER COLUMN AtomicStatBatchLogId INT NOT NULL;
+ALTER TABLE dbo.Deposit_StatType ALTER COLUMN BatchLogId INT NULL;
+ALTER TABLE dbo.Deposit_StatValue ALTER COLUMN AtomicStatBatchLogId INT NOT NULL;
+ALTER TABLE dbo.Deposit_StatValue ALTER COLUMN BatchLogId INT NULL;
+ALTER TABLE dbo.Deposit_StatValue_with_KeyTypeId_HashBulkId ALTER COLUMN AtomicStatBatchLogId INT NOT NULL;
 
 
 ALTER TABLE [devstat].[BatchLog] DROP CONSTRAINT [dfBatchLogBatchProcessUId]
@@ -26,6 +35,7 @@ ALTER TABLE [devstat].[BatchLog] ADD  CONSTRAINT [pkStatBatch] PRIMARY KEY CLUST
 	[BatchLogId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [FG_Main]
 GO
+
 CREATE UNIQUE NONCLUSTERED INDEX [ix01BatchLog] ON [devstat].[BatchLog]
 (
 	[BatchLogId] ASC,
